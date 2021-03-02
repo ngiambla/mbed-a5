@@ -46,10 +46,10 @@ struct DriverRef Drivers[NUM_DRIVERS] = {
 // Loop through our drivers, and close all file
 // descriptors that are open.
 void ReleaseDrivers() {
-  int j = 0;
-  for (j = 0; j < NUM_DRIVERS; ++j) {
-  	if (GetFD(j) != -1)
-  		close(GetFD(j));
+  int i = 0;
+  for (i = 0; i < NUM_DRIVERS; ++i) {
+  	if (GetFD(i) != -1)
+  		close(GetFD(i));
   }
 }
 
@@ -60,6 +60,7 @@ void ErrorHandler(char * Message) {
 }
 
 void OpenDrivers() {
+  int i;
   for (i = 0; i < NUM_DRIVERS; ++i) {
     if ((Drivers[i].FD = open(Drivers[i].Path, Drivers[i].RWP)) == -1) {
       ErrorHandler("Failed to open driver.");
@@ -77,7 +78,7 @@ void ReadFrom(int DevId, char *Buffer, int BufSize) {
 
   if (ReadStatus < 0) {
     Buffer[0] = '\0';
-    CleanupOnError();
+    ErrorHandler("Read was unsuccessful.");
   }
 
   Buffer[BytesRead] = '\0'; // NULL terminate

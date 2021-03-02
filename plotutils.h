@@ -115,8 +115,8 @@ void GenRandPoint() {
 	struct Point * NewPt = (struct Point *)malloc(sizeof(struct Point));
 	if(!NewPt) return;
 
-	NewPt->X = rand()%(XRange-1)+1;
-	NewPt->Y = rand()%(YRange-1)+1;
+	NewPt->X = rand()%(XRange-2)+1;
+	NewPt->Y = rand()%(YRange-2)+1;
 	NewPt->dX = ((rand()%100) > 50) ? 1 : -1;
 	NewPt->dY = ((rand()%100) > 50) ? 1 : -1;
 	if(CurrentPoint) {
@@ -170,12 +170,11 @@ void UpdatePoints() {
 	while(Tmp) {
 		Tmp->X += Tmp->dX;
 		Tmp->Y += Tmp->dY;
-		printf("%d\n", Tmp->Y);
-		if(Tmp->X <= 1 || Tmp->X >= XRange) {
+		if(Tmp->X <= 1 || Tmp->X >= XRange-1) {
 			Tmp->dX *= -1;
 		}
 
-		if(Tmp->Y <= 1 || Tmp->Y >= YRange) {
+		if(Tmp->Y <= 1 || Tmp->Y >= YRange-1) {
 			Tmp->dY *= -1;
 		}
 		Tmp = Tmp->Next;

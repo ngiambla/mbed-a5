@@ -5,7 +5,7 @@
 #include "driverutils.h"
 #include "plotutils.h"
 
-#define ANIMETIME 20000000
+#define ANIMETIME 50000000
 
 volatile sig_atomic_t Running = 1;
 struct timespec AnimationTime;
@@ -41,6 +41,7 @@ int main() {
 	int i = 0;
 	int SWValue;
 	int KEYValue;
+        uint8_t SafelyRead;
 
 	int ShowLines = 1;
 
@@ -58,8 +59,9 @@ int main() {
 		GenRandPoint();
 	}
 
+        OpenDrivers();
 	AnimationTime.tv_sec = 0;
-	AnimationTime.tv_nsec = 500000000;
+	AnimationTime.tv_nsec = 200000000;
 	
 	while(Running) {
 
@@ -71,7 +73,7 @@ int main() {
 		  goto READ_KEYS;
 
 		if(SWValue > 0) ShowLines = 0;
-
+		else ShowLines = 1;
 
 		READ_KEYS:
 	    // Read from the Keys
@@ -86,13 +88,13 @@ int main() {
 
 	  	// Increase Animation Speed
 	  	if (KEYValue & 0x1) {
-	  		if(AnimationTime > 10000000)
+	  		if(AnimationTime.tv_nsec > 10000000)
 	  			AnimationTime.tv_nsec -= ANIMETIME;
 	  	}
 
 	  	// Decrease Animation Speed
 	  	if ((KEYValue >> 1) & 0x1) {
-	  		if(AnimationTime < 500000000)
+	  		if(AnimationTime.tv_nsec < 300000000)
 	  			AnimationTime.tv_nsec += ANIMETIME;
 	  	}
 
@@ -128,7 +130,7 @@ int main() {
 			T1 = T1->Next;
 		}
 		// Show the animation for a while.
-		nanosleep((const struct timespec[]){{0, 200000000L}}, NULL);
+		nanosleep(&AnimationTime, NULL);
 
 		// Now, go over ALL of the lines, and paint them black.
 		T1 = AllPoints;
@@ -145,6 +147,7 @@ int main() {
 		UpdatePoints();
 	}
 
+        ReleaseDrivers();
 	// Reset's the terminal
 	ResetTerminal();
 	fflush(stdout);
