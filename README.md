@@ -42,8 +42,12 @@ Three points are randomly generated, and lines will be drawn between points foll
 
 `P(i) will connect to P(i-1) for all i in Size(P). The last point P(term) will connect to P(0)`
 
+We draw over animations either by (1) clearing the terminal window or (2) drawing `char c = ' '` over the lines.
+These two variations have been included.
+
 To Build: `cd part4; make clean; make;`
-To Use: `./part4.exe`
+To Use (with terminal-clearing): `./part4.exe`.
+To Use (with animation drawover): `./part4.clearline.exe`
 To Exit: press `[ctrl]+c`
 
 # Part 5
@@ -66,8 +70,12 @@ and
 `SW > 0`: Do NOT draw lines.
 `SW == 0`: Draw lines.
 
+We draw over animations either by (1) clearing the terminal window or (2) drawing `char c = ' '` over the lines.
+These two variations have been included.
+
 To Build: `cd part5; make clean; make;`
-To Use: `./part5.exe`
+To Use (with terminal-clearing): `./part5.exe`.
+To Use (with animation drawover): `./part5.clearline.exe`
 To Exit: press `[ctrl]+c`
 
 
@@ -85,4 +93,4 @@ To Exit: press `[ctrl]+c`
 void ResetTerminal() { printf("\ec\n"); }
 ```
 
-4. We draw over animations with `char c = ' '` in `ClearLine` (used in Part 3). In Part{4, 5} we use `ClearTerminal()`.
+4. We draw over animations with `char c = ' '` in `ClearLine(...)` (used in Part 3). In Part{4, 5} we explore both `ClearTerminal()` and `ClearLine(...)`

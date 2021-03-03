@@ -142,24 +142,20 @@ int main() {
     }
     // Show the animation for a while.
     nanosleep(&AnimationTime, NULL);
-    
+
     T1 = AllPoints;
     while (T1) {
-      if (ShowLines) {
-        T2 = T1->Next;
-        // Get ith and (i+1)th Nodes.
-        // Draw a line between them, and use the ith color.
-        if (T1 && T2) {
-          PlotLine(T1->X, T1->Y, T2->X, T2->Y, T1->Color);
-        }
-        // If we are the end of all the points, wrap around (as long as
-        // AllPoints is valid.) Draw the line.
-        if (T1 && !T2 && AllPoints && AllPoints->Next != T1) {
-          PlotLine(T1->X, T1->Y, AllPoints->X, AllPoints->Y, T1->Color);
-          PlotPoint(AllPoints);
-        }
+      T2 = T1->Next;
+      // Get ith and (i+1)th Nodes.
+      // Draw a line between them, and use the ith color.
+      if (T1 && T2) {
+        ClearLine(T1->X, T1->Y, T2->X, T2->Y);
       }
-      PlotPoint(T1);
+      // If we are the end of all the points, wrap around (as long as
+      // AllPoints is valid.) Draw the line.
+      if (T1 && !T2 && AllPoints && AllPoints->Next != T1) {
+        ClearLine(T1->X, T1->Y, AllPoints->X, AllPoints->Y);
+      }
       T1 = T1->Next;
     }    
 

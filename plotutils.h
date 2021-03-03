@@ -24,6 +24,8 @@
 #define LT_CYAN 96
 #define WHITE 97
 
+#define NUM_LETTERS 25
+
 #define NUM_COLORS 15
 const int Colors[NUM_COLORS] = {
     RED,    GREEN,    YELLOW,    BLUE,    MAGENTA,    CYAN,    LT_GRAY, DK_GRAY,
@@ -43,8 +45,8 @@ struct Point {
 // Create two static global variables (i.e., storage local
 // to this scope) which will represent the maximum X and Y range
 // of the terminal (the terminal size)
-static int XRange = 1;
-static int YRange = 1;
+static int XRange = 4;
+static int YRange = 4;
 
 // ColorSelector will be used to cycle through all of the colors
 // as randomly generated nodes are created
@@ -81,9 +83,8 @@ void SetCursorAt(int X, int Y) {
 
 // Provided with a coordinate (X,Y), a Color (e.g., color code for blue) 
 // and Dispchar (e.g., '@'), plot it on the terminal.
-void PlotChar(int X, int Y, int Color, char Dispchar) {
-  SetCursorAt(X, Y);
-  printf("\e[%dm%c\e[0m", Color, Dispchar);
+void PlotChar(int X, int Y, char Color, char Dispchar) {
+  printf("\e[%2dm\e[%d;%dH%c\e[0m", Color, Y, X, Dispchar);
   fflush(stdout);
 }
 
@@ -132,6 +133,8 @@ void GetTerminalSize() {
 // The terminal will be cleared, and the cursor
 // will be hidden.
 void InitializeTerminal() {
+  ColorSelector = rand()%NUM_COLORS;
+  CharacterSelector = rand()%NUM_LETTERS;
   HideCursor();
   ClearTerminal();
   GetTerminalSize();
@@ -179,7 +182,7 @@ void GenRandPoint() {
   NewPt->Color = Colors[ColorSelector%NUM_COLORS];
   ColorSelector++;
   // Generate a symbol between 'A' and 'Z'
-  NewPt->Sym = 'A' + CharacterSelector%25;
+  NewPt->Sym = 'A' + CharacterSelector%NUM_LETTERS;
   CharacterSelector++;
   // Set the NextPoint to NULL
   NewPt->Next = NULL;
@@ -232,9 +235,11 @@ void GenPoint(int X, int Y, int dX, int dY, int Color, int Sym) {
 void UpdatePoints() {
   struct Point *Tmp = AllPoints;
   while (Tmp) {
+    // Update the points.
     Tmp->X += Tmp->dX;
     Tmp->Y += Tmp->dY;
 
+    // Check if we need to flip our directions.
     if (Tmp->X <= 1) {
       Tmp->dX = 1;
     }
