@@ -148,7 +148,7 @@ int main() {
       T2 = T1->Next;
       if (T1 && T2)
         PlotLine(T1->X, T1->Y, T2->X, T2->Y, BLACK);
-      if (T1 && !T2 && AllPoints)
+      if (T1 && !T2 && AllPoints && AllPoints->Next != T1)
         PlotLine(T1->X, T1->Y, AllPoints->X, AllPoints->Y, BLACK);
       T1 = T1->Next;
     }

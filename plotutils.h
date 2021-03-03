@@ -52,13 +52,16 @@ struct Point *AllPoints = NULL;
 struct Point *CurrentPoint = NULL;
 
 /* BEGIN VT100 Helper Functions */
-void SetTextColor(int Color) { printf("\e[%2dm", Color); }
+void SetTextColor(int Color) { printf("\e[%dm", Color); }
 
 // Sets the background as black.
-void SetBackgroundBlack() { printf("\e[40m\n"); }
+void SetBackgroundBlack() { printf("\e[40m"); }
 
 // Resets terminal to initial state
-void ResetTerminal() { printf("\ec\n"); }
+void ResetTerminal() {
+  printf("\ec");
+  fflush(stdout);
+}
 
 // Sets the cursor at the X (i.e., col) and Y (i.e., row) of the
 // terminal

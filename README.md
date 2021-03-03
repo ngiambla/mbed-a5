@@ -84,3 +84,5 @@ To Exit: press `[ctrl]+c`
 // Resets terminal to initial state
 void ResetTerminal() { printf("\ec\n"); }
 ```
+
+4. We draw over animations with black (but have the ability to also clear the screen).

@@ -5,6 +5,7 @@
 #include "plotutils.h"
 
 volatile sig_atomic_t Running = 1;
+struct timespec AnimationTime;
 
 void IntHandler(int inter) { Running = 0; }
 
@@ -49,9 +50,13 @@ int main() {
   InitializeBlackTerminal();
 
   GetTerminalSize();
-  for (i = 0; i < 4; ++i) {
+  for (i = 0; i < 3; ++i) {
     GenRandPoint();
   }
+
+  // Pause the animation every 0.05 Seconds.
+  AnimationTime.tv_sec = 0;
+  AnimationTime.tv_nsec = 50000000;
 
   while (Running) {
 
@@ -74,7 +79,7 @@ int main() {
       T1 = T1->Next;
     }
     // Show the animation for a while.
-    nanosleep((const struct timespec[]){{0, 30000000L}}, NULL);
+    nanosleep(&AnimationTime, NULL);
 
     // Now, go over ALL of the lines, and paint them black.
     T1 = AllPoints;
