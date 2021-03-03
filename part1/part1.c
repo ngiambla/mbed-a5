@@ -8,8 +8,7 @@ char HelpMessage[] = "Press [return] to exit!";
 int main(void) {
   int i;
 
-  // Ensure the terminal is black.
-  InitializeBlackTerminal();
+  InitializeTerminal();
 
   // Plot the Character 'X' at 1,1 with CYAN color.
   PlotChar(1, 1, CYAN, 'X');

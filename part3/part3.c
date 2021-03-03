@@ -18,7 +18,7 @@ void HandleTerminalResize() {
   // resize event, therefore this prevents us
   // from resizing too frequently.
   if (XRange != w.ws_col || YRange != w.ws_row) {
-    InitializeBlackTerminal();
+    ClearTerminal();
   }
 
   // Now, update the XRange and YRange (the limits of the term.)
@@ -37,9 +37,8 @@ int main() {
   signal(SIGWINCH, HandleTerminalResize);
 
   // Get the terminal ready for animations.
-  InitializeBlackTerminal();
-  // Fetch the current terminal size.
-  GetTerminalSize();
+  InitializeTerminal();
+
 
   while (Running) {
     // Here, we draw the line,
@@ -47,7 +46,7 @@ int main() {
     // We could have also just cleared the screen.
     PlotLine(0, CurrentY, XRange, CurrentY, Colors[i % NUM_COLORS]);
     nanosleep((const struct timespec[]){{0, 100000000L}}, NULL);
-    PlotLine(0, CurrentY, XRange, CurrentY, BLACK);
+    ClearLine(0, CurrentY, XRange, CurrentY);
     // Inc will indicate if we are moving up or down
     // in the animation.
     if (Inc)

@@ -11,7 +11,7 @@ int main() {
   int i;
 
   GetTerminalSize();
-  InitializeBlackTerminal();
+  InitializeTerminal();
   // As a reminder for the API call...
   // void GenPoint(int X, int Y, int dX, int dY, int Color, int Sym)
   GenPoint(1, 1, 0, 0, RED, '1');

@@ -46,7 +46,7 @@ struct DriverRef Drivers[NUM_DRIVERS] = {
 // Loop through our drivers, and close all file
 // descriptors that are open.
 void ReleaseDrivers() {
-  int i = 0;
+  int i;
   for (i = 0; i < NUM_DRIVERS; ++i) {
   	if (GetFD(i) != -1)
   		close(GetFD(i));

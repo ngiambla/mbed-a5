@@ -52,10 +52,10 @@ struct Point *AllPoints = NULL;
 struct Point *CurrentPoint = NULL;
 
 /* BEGIN VT100 Helper Functions */
-void SetTextColor(int Color) { printf("\e[%dm", Color); }
-
-// Sets the background as black.
-void SetBackgroundBlack() { printf("\e[40m"); }
+void SetTextColor(int Color) {
+  printf("\e[%dm", Color);
+  fflush(stdout);
+}
 
 // Resets terminal to initial state
 void ResetTerminal() {
@@ -65,7 +65,10 @@ void ResetTerminal() {
 
 // Sets the cursor at the X (i.e., col) and Y (i.e., row) of the
 // terminal
-void SetCursorAt(int X, int Y) { printf("\e[%d;%dH", Y, X); }
+void SetCursorAt(int X, int Y) {
+  printf("\e[%d;%dH", Y, X);
+  fflush(stdout);
+}
 
 // Provided with a coordinate (X,Y), a Color (e.g., color code for blue) 
 // and Dispchar (e.g., '@'), plot it on the terminal.
@@ -77,21 +80,20 @@ void PlotChar(int X, int Y, int Color, int Dispchar) {
 }
 
 // Clear the screen
-void ClearScreen() { printf("\e[2J"); }
+void ClearTerminal() {
+  printf("\e[2J");
+  fflush(stdout);
+}
 
 // Hide the cursor
-void HideCursor() { printf("\e[?25l"); }
+void HideCursor() {
+  printf("\e[?25l");
+  fflush(stdout);
+}
 
 // Show the cursor
-void ShowCursor() { printf("\e[?25h"); }
-
-// The terminal background will be set to "black"
-// and the terminal will be cleared, and the cursor
-// will be hidden.
-void InitializeBlackTerminal() {
-  SetBackgroundBlack();
-  ClearScreen();
-  HideCursor();
+void ShowCursor() {
+  printf("\e[?25h");
   fflush(stdout);
 }
 
@@ -117,6 +119,14 @@ void GetTerminalSize() {
   ioctl(0, TIOCGWINSZ, &w);
   XRange = w.ws_col;
   YRange = w.ws_row;
+}
+
+// The terminal will be cleared, and the cursor
+// will be hidden.
+void InitializeTerminal() {
+  HideCursor();
+  ClearTerminal();
+  GetTerminalSize();
 }
 
 /* END VT100 Helper Functions */
@@ -272,7 +282,7 @@ void DeletePoints() {
 void PlotPoint(struct Point *Pt) { PlotChar(Pt->X, Pt->Y, Pt->Color, Pt->Sym); }
 
 // Follows Bresenham's Algorithm (this ver. is valid for ALL quadrants.)
-void PlotLine(int X0, int Y0, int X1, int Y1, int Color) {
+void GeneralizedPlotLine(int X0, int Y0, int X1, int Y1, int Color, char Sym) {
   // Absolute change in X
   int dX = abs(X1 - X0);
   // Change in slope for X
@@ -287,7 +297,7 @@ void PlotLine(int X0, int Y0, int X1, int Y1, int Color) {
   int DoubleE;
 
   for (;;) {
-    PlotChar(X0, Y0, Color, '*');
+    PlotChar(X0, Y0, Color, Sym);
     DoubleE = E << 1;
     /* Check if the Error between X and Y is > dX */
     if (DoubleE >= dY) {
@@ -304,6 +314,16 @@ void PlotLine(int X0, int Y0, int X1, int Y1, int Color) {
       Y0 += sY;
     }
   }
+}
+
+
+void PlotLine(int X0, int Y0, int X1, int Y1, int Color) {
+  GeneralizedPlotLine(X0, Y0, X1, Y1, Color, '*');
+}
+
+
+void ClearLine(int X0, int Y0, int X1, int Y1) {
+  GeneralizedPlotLine(X0, Y0, X1, Y1, BLACK, ' ');
 }
 /* END PLOT UTILITIES */
 

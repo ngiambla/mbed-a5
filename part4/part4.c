@@ -16,7 +16,7 @@ void HandleTerminalResize() {
   ioctl(0, TIOCGWINSZ, &w);
 
   if (XRange != w.ws_col || YRange != w.ws_row) {
-    InitializeBlackTerminal();
+    ClearTerminal();
   }
 
   XRange = w.ws_col;
@@ -47,9 +47,8 @@ int main() {
   signal(SIGWINCH, HandleTerminalResize);
 
   srand(time(NULL));
-  InitializeBlackTerminal();
+  InitializeTerminal();
 
-  GetTerminalSize();
   for (i = 0; i < 3; ++i) {
     GenRandPoint();
   }
@@ -86,9 +85,9 @@ int main() {
     while (T1) {
       T2 = T1->Next;
       if (T1 && T2)
-        PlotLine(T1->X, T1->Y, T2->X, T2->Y, BLACK);
+        ClearLine(T1->X, T1->Y, T2->X, T2->Y);
       if (T1 && !T2 && AllPoints && AllPoints->Next != T1)
-        PlotLine(T1->X, T1->Y, AllPoints->X, AllPoints->Y, BLACK);
+        ClearLine(T1->X, T1->Y, AllPoints->X, AllPoints->Y);
       T1 = T1->Next;
     }
 
