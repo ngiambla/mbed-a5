@@ -5,8 +5,8 @@
 #include "driverutils.h"
 #include "plotutils.h"
 
-// 0.05 Second [Dec/Inc]rements
-#define ANIMETIME 50000000
+// 0.02 Second [Dec/Inc]rements
+#define ANIMETIME 20000000
 
 volatile sig_atomic_t Running = 1;
 struct timespec AnimationTime;
@@ -34,9 +34,9 @@ void HandleTerminalResize() {
   // within a 4-char space away from the edge.
   while (Tmp) {
     if (Tmp->X > XRange)
-      Tmp->X = XRange - (rand() % 4);
+      Tmp->X = XRange;
     if (Tmp->Y > YRange)
-      Tmp->Y = YRange - (rand() % 4);
+      Tmp->Y = YRange;
     Tmp = Tmp->Next;
   }
 }
@@ -98,8 +98,8 @@ int main() {
 
     // Increase Animation Speed
     if (KEYValue & 0x1) {
-      // Cap at 0.01 Seconds.
-      if (AnimationTime.tv_nsec > 10000000)
+      // Cap at 0.03 Seconds.
+      if (AnimationTime.tv_nsec > 30000000)
         AnimationTime.tv_nsec -= ANIMETIME;
     }
 

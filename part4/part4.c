@@ -4,7 +4,6 @@
 
 #include "plotutils.h"
 
-
 volatile sig_atomic_t Running = 1;
 
 void IntHandler(int inter) { Running = 0; }
@@ -30,9 +29,9 @@ void HandleTerminalResize() {
   // within a 4-char space away from the edge.
   while (Tmp) {
     if (Tmp->X > XRange)
-      Tmp->X = XRange - (rand() % 4);
+      Tmp->X = XRange;
     if (Tmp->Y > YRange)
-      Tmp->Y = YRange - (rand() % 4);
+      Tmp->Y = YRange;
     Tmp = Tmp->Next;
   }
 }
@@ -50,7 +49,7 @@ int main() {
   InitializeBlackTerminal();
 
   GetTerminalSize();
-  for (i = 0; i < 3; ++i) {
+  for (i = 0; i < 4; ++i) {
     GenRandPoint();
   }
 
@@ -75,7 +74,7 @@ int main() {
       T1 = T1->Next;
     }
     // Show the animation for a while.
-    nanosleep((const struct timespec[]){{0, 20000000L}}, NULL);
+    nanosleep((const struct timespec[]){{0, 30000000L}}, NULL);
 
     // Now, go over ALL of the lines, and paint them black.
     T1 = AllPoints;
@@ -83,7 +82,7 @@ int main() {
       T2 = T1->Next;
       if (T1 && T2)
         PlotLine(T1->X, T1->Y, T2->X, T2->Y, BLACK);
-      if (T1 && !T2 && AllPoints)
+      if (T1 && !T2 && AllPoints && AllPoints->Next != T1)
         PlotLine(T1->X, T1->Y, AllPoints->X, AllPoints->Y, BLACK);
       T1 = T1->Next;
     }

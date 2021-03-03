@@ -56,8 +56,8 @@ The user can interact with the `KEY`s and `SW`s to change the behaviour of this 
 
 Specifically:
 
-`KEY0`: Decrease the sleep interval by 0.05 Seconds (until we cap at 0.01 Seconds)
-`KEY1`: Increase the sleep interval by 0.05 Seconds (until we cap at 0.3 Seconds)
+`KEY0`: Decrease the sleep interval by 0.02 Seconds (until we cap at 0.03 Seconds)
+`KEY1`: Increase the sleep interval by 0.02 Seconds (until we cap at 0.3 Seconds)
 `KEY2`: Introduce a new point to the terminal (limited by malloc...)
 `KEY3`: Remove the most recently created point (all points can be removed...)
 

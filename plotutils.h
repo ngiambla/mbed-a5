@@ -89,6 +89,7 @@ void InitializeBlackTerminal() {
   SetBackgroundBlack();
   ClearScreen();
   HideCursor();
+  fflush(stdout);
 }
 
 // Here, we can probe the Kernel for the current terminal
@@ -151,9 +152,8 @@ void GenRandPoint() {
       NewPt->Color = Colors[rand() % NUM_COLORS];
     }
   }
-  // Randomly generate a symbol from ASCII Char 34 (i.e., '!')
-  // to 93 (i.e., '~')
-  NewPt->Sym = (rand() % 93) + 34;
+  // Randomly generate a symbol between 'A' and 'Z'
+  NewPt->Sym = (rand() % 26) + 65;
   // Set the NextPoint to NULL
   NewPt->Next = NULL;
 
@@ -206,13 +206,23 @@ void UpdatePoints() {
   while (Tmp) {
     Tmp->X += Tmp->dX;
     Tmp->Y += Tmp->dY;
-    if (Tmp->X <= 1 || Tmp->X >= XRange) {
-      Tmp->dX *= -1;
+
+    if (Tmp->X <= 1) {
+      Tmp->dX = 1;
     }
 
-    if (Tmp->Y <= 1 || Tmp->Y >= YRange) {
-      Tmp->dY *= -1;
+    if (Tmp->X >= XRange) {
+      Tmp->dX = -1;
     }
+
+    if (Tmp->Y <= 1) {
+      Tmp->dY = 1;
+    }
+
+    if (Tmp->Y >= YRange) {
+      Tmp->dY = -1;
+    }
+
     Tmp = Tmp->Next;
   }
 }
