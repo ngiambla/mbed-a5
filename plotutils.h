@@ -46,6 +46,12 @@ struct Point {
 static int XRange = 1;
 static int YRange = 1;
 
+// ColorSelector will be used to cycle through all of the colors
+// as randomly generated nodes are created
+static int ColorSelector = 0;
+// CharacterSelector will be used to cycle through the alphabet ('A' - 'Z')
+static int CharacterSelector = 0;
+
 // AllPoints is a linked-list of ALL the points which we have created and wish to display.
 struct Point *AllPoints = NULL;
 // CurrentPoint points to the last node of the linked list.
@@ -75,9 +81,9 @@ void SetCursorAt(int X, int Y) {
 
 // Provided with a coordinate (X,Y), a Color (e.g., color code for blue) 
 // and Dispchar (e.g., '@'), plot it on the terminal.
-void PlotChar(int X, int Y, int Color, int Dispchar) {
+void PlotChar(int X, int Y, int Color, char Dispchar) {
   SetCursorAt(X, Y);
-  printf("\e[%dm%c", Color, Dispchar);
+  printf("\e[%dm%c\e[0m", Color, Dispchar);
   fflush(stdout);
 }
 
@@ -148,27 +154,33 @@ void GenRandPoint() {
   if (!NewPt)
     return;
   // Now, fill in the fields of the newly created struct.
-  // Here, we randomly select between (1 .. XRange-1) and (1 .. YRange-1)
+  // Here, we randomly select between (1 .. XRange) and (1 .. YRange)
   // for the coordinates.
-  NewPt->X = rand() % (XRange - 2) + 1;
-  NewPt->Y = rand() % (YRange - 2) + 1;
+  NewPt->X = rand() % (XRange)+1;
+  NewPt->Y = rand() % (YRange)+1;
   // We also randomly choose to move each point in 
   // one of the four diagonal directions.
-  NewPt->dX = ((rand() % 100) > 50) ? 1 : -1;
-  NewPt->dY = ((rand() % 100) > 50) ? 1 : -1;
-  // Select a color randomly.
-  NewPt->Color = Colors[rand() % NUM_COLORS];
-  // If we ALREADY have a CurrentPoint
-  // then we want to make sure that this point will NOT
-  // have the same generated color (to assist in differentiating)
-  // the lines when we plot.  
-  if (CurrentPoint) {
-    while (NewPt->Color == CurrentPoint->Color) {
-      NewPt->Color = Colors[rand() % NUM_COLORS];
-    }
-  }
-  // Randomly generate a symbol between 'A' and 'Z'
-  NewPt->Sym = (rand() % 26) + 65;
+  if(NewPt->X == 1)
+    NewPt->dX = 1;
+  else if(NewPt->X == XRange)
+    NewPt->dX = -1;
+  else
+    NewPt->dX = ((rand() % 100) > 50) ? 1 : -1;
+
+  if(NewPt->Y == 1)
+    NewPt->dY = 1;
+  else if(NewPt->Y == YRange)
+    NewPt->dY = -1;
+  else
+    NewPt->dY = ((rand() % 100) > 50) ? 1 : -1;
+
+
+  // Select a color.
+  NewPt->Color = Colors[ColorSelector%NUM_COLORS];
+  ColorSelector++;
+  // Generate a symbol between 'A' and 'Z'
+  NewPt->Sym = 'A' + CharacterSelector%25;
+  CharacterSelector++;
   // Set the NextPoint to NULL
   NewPt->Next = NULL;
 
@@ -188,6 +200,7 @@ void GenRandPoint() {
 // GenPoint allows the user to manually specify all of the fields
 // of a newly created point (which is then linked into the global
 // pointers).
+// The user is responsible for geneting valid coordinates...
 void GenPoint(int X, int Y, int dX, int dY, int Color, int Sym) {
   struct Point *NewPt = (struct Point *)malloc(sizeof(struct Point));
   if (!NewPt)
