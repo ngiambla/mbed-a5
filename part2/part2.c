@@ -10,7 +10,6 @@ int main() {
   struct Point *TempPoint;
   int i;
 
-  GetTerminalSize();
   InitializeTerminal();
   // As a reminder for the API call...
   // void GenPoint(int X, int Y, int dX, int dY, int Color, int Sym)

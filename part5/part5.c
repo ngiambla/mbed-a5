@@ -120,7 +120,9 @@ int main() {
     }
 
   DRAW:
-    // First, Draw the Points and Lines.
+    // First, Clear the terminal:
+    ClearTerminal();
+    // Then, Draw the Points and Lines.
     T1 = AllPoints;
     while (T1) {
       if (ShowLines) {
@@ -140,22 +142,10 @@ int main() {
       PlotPoint(T1);
       T1 = T1->Next;
     }
-    // Show the animation for a while.
-    nanosleep(&AnimationTime, NULL);
-
-    // Now, go over ALL of the lines, and paint them black.
-    T1 = AllPoints;
-    while (T1) {
-      T2 = T1->Next;
-      if (T1 && T2)
-        ClearLine(T1->X, T1->Y, T2->X, T2->Y);
-      if (T1 && !T2 && AllPoints && AllPoints->Next != T1)
-        ClearLine(T1->X, T1->Y, AllPoints->X, AllPoints->Y);
-      T1 = T1->Next;
-    }
-
     // Update the points based on their dX and dY
     UpdatePoints();
+    // Show the animation for a while.
+    nanosleep(&AnimationTime, NULL);
   }
 
   ReleaseDrivers();

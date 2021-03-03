@@ -85,4 +85,4 @@ To Exit: press `[ctrl]+c`
 void ResetTerminal() { printf("\ec\n"); }
 ```
 
-4. We draw over animations with black (but have the ability to also clear the screen).
+4. We draw over animations with `char c = ' '` in `ClearLine` (used in Part 3). In Part{4, 5} we use `ClearTerminal()`.

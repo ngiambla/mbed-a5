@@ -52,10 +52,13 @@ struct Point *AllPoints = NULL;
 struct Point *CurrentPoint = NULL;
 
 /* BEGIN VT100 Helper Functions */
+
+// Set Color of Text.
 void SetTextColor(int Color) {
   printf("\e[%dm", Color);
   fflush(stdout);
 }
+
 
 // Resets terminal to initial state
 void ResetTerminal() {
@@ -73,9 +76,8 @@ void SetCursorAt(int X, int Y) {
 // Provided with a coordinate (X,Y), a Color (e.g., color code for blue) 
 // and Dispchar (e.g., '@'), plot it on the terminal.
 void PlotChar(int X, int Y, int Color, int Dispchar) {
-  SetTextColor(Color);
   SetCursorAt(X, Y);
-  printf("%c", Dispchar);
+  printf("\e[%dm%c", Color, Dispchar);
   fflush(stdout);
 }
 
