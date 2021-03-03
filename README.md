@@ -94,3 +94,4 @@ void ResetTerminal() { printf("\ec\n"); }
 ```
 
 4. We draw over animations with `char c = ' '` in `ClearLine(...)` (used in Part 3). In Part{4, 5} we explore both `ClearTerminal()` and `ClearLine(...)`
+   I've included both animations to demonstrate how we can use a 'linked-list' to easily walk over any objects we wish to clear.

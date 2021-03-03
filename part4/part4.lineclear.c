@@ -37,8 +37,6 @@ void HandleTerminalResize() {
       Tmp->Y = YRange;
       Tmp->dY = -1;
     }
-    
-    //
     Tmp = Tmp->Next;
   }
 }

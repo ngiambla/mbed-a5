@@ -6,6 +6,8 @@
 
 
 volatile sig_atomic_t Running = 1;
+int CurrentY = 0;
+int Inc = 1;
 
 void IntHandler(int inter) { Running = 0; }
 
@@ -24,12 +26,15 @@ void HandleTerminalResize() {
   // Now, update the XRange and YRange (the limits of the term.)
   XRange = w.ws_col;
   YRange = w.ws_row;
+
+  if (CurrentY >= YRange) {
+    Inc = 0;
+    CurrentY = YRange;
+  }
 }
 
 int main() {
 
-  int CurrentY = 0;
-  int Inc = 1;
   int i = 0;
 
   // Register the signal handlers.

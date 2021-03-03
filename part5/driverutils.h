@@ -55,7 +55,7 @@ void ReleaseDrivers() {
 
 void ErrorHandler(char * Message) {
   ReleaseDrivers();
-  printf("Error Encountered: %s\nExiting %s\n", Message, strerror(errno));
+  fprintf(stderr, "Error Encountered: %s\nExiting %s\n", Message, strerror(errno));
   exit(-1);
 }
 

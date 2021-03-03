@@ -29,10 +29,14 @@ void HandleTerminalResize() {
   // If so, we set the new X,Y coordinate to be within the window
   // within a 4-char space away from the edge.
   while (Tmp) {
-    if (Tmp->X > XRange)
+    if (Tmp->X > XRange) {
       Tmp->X = XRange;
-    if (Tmp->Y > YRange)
+      Tmp->dX = -1;
+    }
+    if (Tmp->Y > YRange) {
       Tmp->Y = YRange;
+      Tmp->dY = -1;
+    }
     Tmp = Tmp->Next;
   }
 }
